@@ -8,7 +8,17 @@ st.title('NFL Free Research Lab')
 st.caption('Out-of-sample model research • no betting execution • no verified ROI')
 path=Path(__file__).resolve().parent/'data'/'walkforward.csv'
 if not path.exists():
-    st.info('Run: python engine.py all — then reload this dashboard.')
+    st.info('Build the historical research dataset to get started.')
+    if st.button('Build historical model'):
+        try:
+            import engine
+            with st.spinner('Downloading data and training historical models...'):
+                engine.fetch()
+                engine.prepare()
+                engine.run()
+            st.rerun()
+        except Exception as exc:
+            st.error(str(exc))
     st.stop()
 df=pd.read_csv(path)
 seasons=sorted(df.season.unique().tolist())
